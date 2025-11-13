@@ -8,26 +8,32 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StopListActivity extends AppCompatActivity {
 
-    private List<StopListItem> stopListItems = new ArrayList<>(Arrays.asList(
-            new StopListItem(1, "Тирамису", "Закончился сыр маскарпоне"),
-            new StopListItem(2, "Стейк", "Закончилась говядина")
-    ));
+    private DatabaseHelper dbHelper;
+    private List<StopListItem> stopListItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop_list);
 
+        // Простая инициализация базы данных
+        dbHelper = new DatabaseHelper(this);
+
         setupHeader();
         setupStopList();
         setupBottomNavigation();
         setupLogoutButton();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Обновляем список при возвращении на экран
+        setupStopList();
     }
 
     private void setupHeader() {
@@ -44,19 +50,19 @@ public class StopListActivity extends AppCompatActivity {
     }
 
     private void showAddStopListItemDialog() {
-        // Создаем диалоговое окно
         final EditText inputDishName = new EditText(this);
-        final EditText inputReason = new EditText(this);
+        final EditText inputPrice = new EditText(this);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(50, 20, 50, 20);
 
         inputDishName.setHint("Название блюда");
-        inputReason.setHint("Причина");
+        inputPrice.setHint("Цена");
+        inputPrice.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
 
         layout.addView(inputDishName);
-        layout.addView(inputReason);
+        layout.addView(inputPrice);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Добавить в стоп-лист")
@@ -65,17 +71,28 @@ public class StopListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(android.content.DialogInterface dialog, int which) {
                         String dishName = inputDishName.getText().toString().trim();
-                        String reason = inputReason.getText().toString().trim();
+                        String priceStr = inputPrice.getText().toString().trim();
 
-                        if (!dishName.isEmpty() && !reason.isEmpty()) {
-                            StopListItem newItem = new StopListItem(
-                                    stopListItems.size() + 1,
-                                    dishName,
-                                    reason
-                            );
-                            stopListItems.add(newItem);
-                            setupStopList();
-                            Toast.makeText(StopListActivity.this, "Блюдо добавлено в стоп-лист", Toast.LENGTH_SHORT).show();
+                        if (!dishName.isEmpty() && !priceStr.isEmpty()) {
+                            try {
+                                double price = Double.parseDouble(priceStr);
+                                // Получаем максимальный dish_id
+                                List<StopListItem> currentList = dbHelper.getStopList();
+                                int newDishId = 1;
+                                if (!currentList.isEmpty()) {
+                                    newDishId = currentList.get(currentList.size() - 1).getId() + 1;
+                                }
+
+                                boolean success = dbHelper.addToStopList(newDishId, dishName, price);
+                                if (success) {
+                                    setupStopList();
+                                    Toast.makeText(StopListActivity.this, "Блюдо добавлено в стоп-лист", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StopListActivity.this, "Ошибка добавления", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (NumberFormatException e) {
+                                Toast.makeText(StopListActivity.this, "Введите корректную цену", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(StopListActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                         }
@@ -88,6 +105,9 @@ public class StopListActivity extends AppCompatActivity {
     private void setupStopList() {
         LinearLayout stopListContainer = findViewById(R.id.stopListContainer);
         stopListContainer.removeAllViews();
+
+        // Получаем стоп-лист из БД
+        stopListItems = dbHelper.getStopList();
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -104,14 +124,40 @@ public class StopListActivity extends AppCompatActivity {
             btnRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    stopListItems.remove(item);
-                    setupStopList();
-                    Toast.makeText(StopListActivity.this, "Блюдо удалено из стоп-листа", Toast.LENGTH_SHORT).show();
+                    showRemoveFromStopListConfirmation(item);
                 }
             });
 
             stopListContainer.addView(itemView);
         }
+    }
+
+    private void showRemoveFromStopListConfirmation(final StopListItem item) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Восстановление блюда")
+                .setMessage("Вы уверены, что хотите вернуть блюдо \"" + item.getDishName() + "\" в основное меню?")
+                .setPositiveButton("Вернуть в меню", new android.content.DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(android.content.DialogInterface dialog, int which) {
+                        // Получаем цену из стоп-листа
+                        double price = dbHelper.getPriceFromStopList(item.getId());
+
+                        // Добавляем блюдо в основное меню
+                        boolean addSuccess = dbHelper.addDishToMenu(item.getId(), item.getDishName(), price);
+
+                        // Удаляем из стоп-листа
+                        boolean removeSuccess = dbHelper.removeFromStopList(item.getId());
+
+                        if (addSuccess && removeSuccess) {
+                            setupStopList();
+                            Toast.makeText(StopListActivity.this, "Блюдо \"" + item.getDishName() + "\" возвращено в меню", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(StopListActivity.this, "Ошибка при восстановлении блюда", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Отмена", null)
+                .show();
     }
 
     private void setupBottomNavigation() {
@@ -156,5 +202,13 @@ public class StopListActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
     }
 }

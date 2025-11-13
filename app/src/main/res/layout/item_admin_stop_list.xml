@@ -18,7 +18,7 @@
             android:id="@+id/tvStopListDishName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Тирамису"
+            android:text="Название блюда"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
@@ -27,7 +27,7 @@
             android:id="@+id/tvStopListReason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Закончился сыр маскарпоне"
+            android:text="Причина"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginTop="4dp" />
@@ -35,7 +35,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnRemove"
+        android:id="@+id/btnRemoveFromStopList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Вернуть в меню"

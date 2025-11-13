@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Header с кнопкой выхода -->
+    <!-- Header с кнопками -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,6 +22,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
+
 
         <Button
             android:id="@+id/btnLogout"
@@ -47,16 +48,49 @@
 
     </ScrollView>
 
-    <!-- Кнопка добавления блюда -->
-    <Button
-        android:id="@+id/btnAddDish"
+    <!-- Навигация для АДМИНИСТРАТОРА (без ингредиентов) -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="+ Добавить блюдо"
-        android:textSize="18sp"
-        android:padding="16dp"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        android:layout_margin="16dp" />
+        android:orientation="horizontal"
+        android:background="@color/light_gray"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/btnStopListNav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Стоп-лист"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/black" />
+
+        <!-- Кнопка ингредиентов СКРЫТА для администратора -->
+        <TextView
+            android:id="@+id/btnIngredientsNav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ингредиенты"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/btnMenuNav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Меню"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
 
 </LinearLayout>
