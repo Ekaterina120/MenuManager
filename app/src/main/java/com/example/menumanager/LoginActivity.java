@@ -2,121 +2,125 @@ package com.example.menumanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.Arrays;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etUsername;
+    private static final String TAG = "LoginActivity";
     private EditText etPassword;
-    private Button btnLogin;
-    private Button btnBack;
-    private TextView tvRoleTitle;
-
-    private String selectedRole;
-
-    private final List<User> users = Arrays.asList(
-            new User(1, "admin", "ADMIN", "admin123"),
-            new User(2, "chef", "CHEF", "chef123")
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        Log.d(TAG, "=== onCreate началось ===");
 
-        // Получаем выбранную роль
-        selectedRole = getIntent().getStringExtra("ROLE");
-        if (selectedRole == null) {
-            selectedRole = "ADMIN";
+        try {
+            setContentView(R.layout.activity_login);
+            Log.d(TAG, "setContentView выполнен");
+        } catch (Exception e) {
+            Log.e(TAG, "ОШИБКА в setContentView: " + e.getMessage(), e);
+            Toast.makeText(this, "Ошибка layout: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
 
-        initViews();
-        setupUI();
-        setupClickListeners();
-    }
-
-    private void initViews() {
-        etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnBack = findViewById(R.id.btnBack);
-        tvRoleTitle = findViewById(R.id.tvRoleTitle);
-    }
+        Button btnLogin = findViewById(R.id.btnLogin);
+        TextView tvRoleLabel = findViewById(R.id.tvRole);
 
-    private void setupUI() {
-        // Устанавливаем заголовок в зависимости от роли
-        if ("ADMIN".equals(selectedRole)) {
-            tvRoleTitle.setText("Вход для администратора");
-        } else if ("CHEF".equals(selectedRole)) {
-            tvRoleTitle.setText("Вход для повара");
+        String role = getIntent().getStringExtra("ROLE");
+        if (role == null) role = "admin";
+
+        Log.d(TAG, "Роль: " + role);
+        tvRoleLabel.setText("Роль: " + role);
+
+        // Скрываем поле пароля для клиента
+        if (role.equals("client")) {
+            Log.d(TAG, "Скрываем поле пароля для клиента");
+            etPassword.setVisibility(View.GONE);
+            View passwordLabel = findViewById(R.id.tvPasswordLabel);
+            if (passwordLabel != null) {
+                passwordLabel.setVisibility(View.GONE);
+            }
+        } else {
+            Log.d(TAG, "Поле пароля видимо для " + role);
+            etPassword.setVisibility(View.VISIBLE);
+            View passwordLabel = findViewById(R.id.tvPasswordLabel);
+            if (passwordLabel != null) {
+                passwordLabel.setVisibility(View.VISIBLE);
+            }
         }
-    }
 
-    private void setupClickListeners() {
+        final String finalRole = role;
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = etUsername.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
+                Log.d(TAG, "=== КНОПКА НАЖАТА! ===");
+                Log.d(TAG, "Роль: " + finalRole);
 
-                if (username.isEmpty() || password.isEmpty()) {
-                    showError("Заполните все поля");
-                    return;
-                }
+                try {
+                    // Для клиента пароль не требуется
+                    if (finalRole.equals("client")) {
+                        Log.d(TAG, "Открываем ClientMenuActivity для клиента");
+                        Toast.makeText(LoginActivity.this, "Вход как Клиент...", Toast.LENGTH_SHORT).show();
 
-                User user = authenticateUser(username, password, selectedRole);
-                if (user != null) {
-                    openWorkScreen(user.getRole());
-                } else {
-                    showError("Неверный логин или пароль");
+                        // ИСПРАВЛЕНО: ClientMenuActivity вместо ClientActivity
+                        Intent intent = new Intent(LoginActivity.this, ClientMenuActivity.class);
+                        startActivity(intent);
+                        Log.d(TAG, "Переход на ClientMenuActivity выполнен");
+                        finish();
+                        return;
+                    }
+
+                    // Проверка пароля для админа и повара
+                    String password = etPassword.getText().toString().trim();
+                    Log.d(TAG, "Введен пароль: '" + password + "'");
+
+                    if (password.isEmpty()) {
+                        etPassword.setError("Введите пароль");
+                        Log.d(TAG, "Пароль пустой, показываем ошибку");
+                        Toast.makeText(LoginActivity.this, "Введите пароль!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (finalRole.equals("admin") && password.equals("admin123")) {
+                        Log.d(TAG, "Пароль админа верный, открываем ManageMenuActivity");
+                        Toast.makeText(LoginActivity.this, "Вход как Администратор...", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this, ManageMenuActivity.class);
+                        startActivity(intent);
+                        Log.d(TAG, "Переход на ManageMenuActivity выполнен");
+                        finish();
+                    }
+                    else if (finalRole.equals("chef") && password.equals("chef123")) {
+                        Log.d(TAG, "Пароль повара верный, открываем ChefActivity");
+                        Toast.makeText(LoginActivity.this, "Вход как Повар...", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this, ChefActivity.class);
+                        startActivity(intent);
+                        Log.d(TAG, "Переход на ChefActivity выполнен");
+                        finish();
+                    }
+                    else {
+                        Toast.makeText(LoginActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Неверный пароль для роли " + finalRole + ": " + password);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "ОШИБКА перехода: " + e.getMessage(), e);
+                    Toast.makeText(LoginActivity.this,
+                            "Ошибка: " + e.getClass().getSimpleName() + "\n" + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    private User authenticateUser(String username, String password, String role) {
-        for (User user : users) {
-            if (user.getUsername().equals(username) &&
-                    user.getPassword().equals(password) &&
-                    user.getRole().equals(role)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    private void openWorkScreen(String role) {
-        Intent intent;
-        switch (role) {
-            case "ADMIN":
-                intent = new Intent(this, ManageMenuActivity.class);
-                break;
-            case "CHEF":
-                intent = new Intent(this, StopListActivity.class);
-                break;
-            default:
-                intent = new Intent(this, ClientMenuActivity.class);
-                break;
-        }
-        startActivity(intent);
-        finish();
-    }
-
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "=== onCreate завершено ===");
     }
 }

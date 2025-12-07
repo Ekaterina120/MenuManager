@@ -3,89 +3,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:padding="16dp">
 
-    <!-- Header с кнопкой выхода -->
+    <!-- Заголовок -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="@color/light_gray">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
         <TextView
+            android:id="@+id/tvHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Меню"
+            android:text="🍽️ Меню ресторана"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textStyle="bold"/>
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Выйти"
-            android:backgroundTint="@color/gray"
-            android:textColor="@color/black" />
-
+            android:text="Выйти"/>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="16dp">
-
-        <LinearLayout
-            android:id="@+id/menuContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-    </ScrollView>
-
+    <!-- Поиск -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/light_gray"
-        android:padding="8dp">
+        android:layout_marginBottom="16dp">
 
-        <TextView
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Поиск блюд"
+            android:padding="12dp"/>
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Найти"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Навигация -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
             android:id="@+id/btnMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Меню"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
+            android:background="#2196F3"
+            android:textColor="#FFFFFF"/>
 
-        <TextView
-            android:id="@+id/btnFavorites"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Избранное"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
-
-        <TextView
+        <Button
             android:id="@+id/btnCart"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Корзина"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
+            android:text="Корзина"/>
 
+        <Button
+            android:id="@+id/btnFavorites"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Избранное"/>
     </LinearLayout>
+
+    <!-- Контейнер для блюд -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/menuContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
 
 </LinearLayout>

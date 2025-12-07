@@ -2,48 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
-    android:background="@android:color/white"
-    android:layout_marginBottom="8dp"
-    android:elevation="2dp">
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/item_background"
+    android:layout_marginBottom="8dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvStopListDishName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Тирамису"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/tvStopListReason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Закончился сыр маскарпоне"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnRemove"
+    <TextView
+        android:id="@+id/tvStopDishName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Вернуть в меню"
-        android:textSize="12sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="8dp"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white" />
+        android:text="Название блюда"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/red"/>
+
+    <TextView
+        android:id="@+id/tvStopDishPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="250 ₽"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tvStopStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🚫 В стоп-листе"
+        android:textSize="14sp"
+        android:textColor="@color/orange"
+        android:layout_marginTop="4dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnRestoreFromStopList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="✅ Восстановить"
+            android:backgroundTint="@color/green"
+            android:layout_marginEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnRemoveFromStopList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🗑️ Удалить"
+            android:backgroundTint="@color/red"/>
+
+    </LinearLayout>
 
 </LinearLayout>

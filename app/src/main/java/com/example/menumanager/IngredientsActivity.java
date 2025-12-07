@@ -1,14 +1,13 @@
 package com.example.menumanager;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import java.util.List;
+import java.util.ArrayList;
 
 public class IngredientsActivity extends AppCompatActivity {
 
@@ -20,122 +19,155 @@ public class IngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
 
-        dbHelper = new DatabaseHelper(this);
+        dbHelper = DatabaseHelper.getInstance(this);
+        ingredients = new ArrayList<>();
 
         setupHeader();
-        setupIngredientsList();
-        setupBottomNavigation();
-        setupLogoutButton();
-    }
+        loadIngredients();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupIngredientsList();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (dbHelper != null) {
-            dbHelper.close();
-        }
+        Toast.makeText(this, "Управление ингредиентами", Toast.LENGTH_SHORT).show();
     }
 
     private void setupHeader() {
         TextView tvHeader = findViewById(R.id.tvHeader);
-        tvHeader.setText("Управление ингредиентами");
+        tvHeader.setText("🥕 Управление ингредиентами");
+
+        Button btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+
+        Button btnAdd = findViewById(R.id.btnAddIngredient);
+        btnAdd.setOnClickListener(v -> {
+            showAddIngredientDialog();
+        });
     }
 
-    private void setupIngredientsList() {
-        LinearLayout ingredientsContainer = findViewById(R.id.ingredientsContainer);
-        ingredientsContainer.removeAllViews();
+    private void loadIngredients() {
+        LinearLayout container = findViewById(R.id.ingredientsContainer);
+        if (container == null) {
+            Toast.makeText(this, "Контейнер не найден", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        container.removeAllViews();
 
         ingredients = dbHelper.getAllIngredients();
 
         if (ingredients.isEmpty()) {
             TextView emptyText = new TextView(this);
-            emptyText.setText("Ингредиенты не найдены");
+            emptyText.setText("Нет ингредиентов");
             emptyText.setTextSize(18);
-            emptyText.setTextColor(android.graphics.Color.BLACK);
-            emptyText.setPadding(0, 50, 0, 0);
+            emptyText.setTextColor(getResources().getColor(R.color.gray));
             emptyText.setGravity(android.view.Gravity.CENTER);
-            ingredientsContainer.addView(emptyText);
+            container.addView(emptyText);
             return;
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
         for (final Ingredient ingredient : ingredients) {
-            View itemView = inflater.inflate(R.layout.item_ingredient, ingredientsContainer, false);
+            View itemView = inflater.inflate(R.layout.item_ingredient, container, false);
 
             TextView tvName = itemView.findViewById(R.id.tvIngredientName);
             TextView tvQuantity = itemView.findViewById(R.id.tvIngredientQuantity);
-            Button btnUpdateQuantity = itemView.findViewById(R.id.btnUpdateQuantity);
+            TextView tvStatus = itemView.findViewById(R.id.tvIngredientStatus);
+            Button btnUpdate = itemView.findViewById(R.id.btnUpdateIngredient);
+            Button btnDelete = itemView.findViewById(R.id.btnDeleteIngredient);
 
             tvName.setText(ingredient.getName());
-            tvQuantity.setText("Количество: " + ingredient.getQuantity() + " г");
+            tvQuantity.setText(String.format("Количество: %.1f", ingredient.getQuantity()));
 
-            // Подсвечиваем ингредиенты с низким количеством
-            if (ingredient.getQuantity() < 1000) {
-                itemView.setBackgroundColor(android.graphics.Color.parseColor("#FFF9C4"));
+            // Определяем статус
+            if (ingredient.getQuantity() < 3) {
+                tvStatus.setText("⚠️ МАЛО");
+                tvStatus.setTextColor(getResources().getColor(R.color.red));
+            } else if (ingredient.getQuantity() < 10) {
+                tvStatus.setText("⚠️ СРЕДНЕ");
+                tvStatus.setTextColor(getResources().getColor(R.color.orange));
+            } else {
+                tvStatus.setText("✓ НОРМА");
+                tvStatus.setTextColor(getResources().getColor(R.color.green));
             }
 
-            btnUpdateQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showUpdateQuantityDialog(ingredient);
-                }
-            });
+            btnUpdate.setOnClickListener(v -> showUpdateIngredientDialog(ingredient));
+            btnDelete.setOnClickListener(v -> showDeleteIngredientConfirmation(ingredient));
 
-            // Добавляем долгое нажатие для удаления
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    showDeleteIngredientConfirmation(ingredient);
-                    return true;
-                }
-            });
-
-            ingredientsContainer.addView(itemView);
+            container.addView(itemView);
         }
     }
 
-    private void showUpdateQuantityDialog(final Ingredient ingredient) {
-        final EditText inputQuantity = new EditText(this);
-        inputQuantity.setHint("Новое количество (г)");
-        inputQuantity.setText(String.valueOf(ingredient.getQuantity()));
-        inputQuantity.setInputType(android.text.InputType.TYPE_CLASS_NUMBER |
-                android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(50, 20, 50, 20);
-        layout.addView(inputQuantity);
-
+    private void showAddIngredientDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Изменение количества: " + ingredient.getName())
-                .setView(layout)
-                .setPositiveButton("Сохранить", new android.content.DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(android.content.DialogInterface dialog, int which) {
-                        String quantityStr = inputQuantity.getText().toString().trim();
-                        if (!quantityStr.isEmpty()) {
-                            try {
-                                double newQuantity = Double.parseDouble(quantityStr);
-                                boolean success = dbHelper.updateIngredientQuantity(ingredient.getId(), newQuantity);
-                                if (success) {
-                                    setupIngredientsList();
-                                    Toast.makeText(IngredientsActivity.this,
-                                            "Количество обновлено: " + newQuantity + " г",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(IngredientsActivity.this, "Ошибка обновления", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (NumberFormatException e) {
-                                Toast.makeText(IngredientsActivity.this, "Введите корректное число", Toast.LENGTH_SHORT).show();
-                            }
+        builder.setTitle("➕ Добавить ингредиент");
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_ingredient, null);
+
+        final EditText etName = dialogView.findViewById(R.id.etIngredientName);
+        final EditText etQuantity = dialogView.findViewById(R.id.etIngredientQuantity);
+
+        builder.setView(dialogView)
+                .setPositiveButton("Добавить", (dialog, which) -> {
+                    String name = etName.getText().toString().trim();
+                    String quantityStr = etQuantity.getText().toString().trim();
+
+                    if (name.isEmpty() || quantityStr.isEmpty()) {
+                        Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    try {
+                        double quantity = Double.parseDouble(quantityStr);
+                        if (quantity < 0) {
+                            Toast.makeText(this, "Количество не может быть отрицательным", Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
+                        boolean success = dbHelper.addIngredient(name, quantity);
+
+                        if (success) {
+                            Toast.makeText(this, "✅ Ингредиент добавлен", Toast.LENGTH_SHORT).show();
+                            loadIngredients();
+                        } else {
+                            Toast.makeText(this, "❌ Ошибка добавления", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, "Введите число в количестве", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Отмена", null)
+                .show();
+    }
+
+    private void showUpdateIngredientDialog(final Ingredient ingredient) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("📝 Изменить: " + ingredient.getName());
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_update_ingredient, null);
+
+        final EditText etQuantity = dialogView.findViewById(R.id.etNewQuantity);
+        etQuantity.setText(String.valueOf(ingredient.getQuantity()));
+
+        builder.setView(dialogView)
+                .setPositiveButton("Сохранить", (dialog, which) -> {
+                    try {
+                        double newQuantity = Double.parseDouble(etQuantity.getText().toString());
+                        if (newQuantity < 0) {
+                            Toast.makeText(this, "Количество не может быть отрицательным", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        boolean success = dbHelper.updateIngredientQuantity(
+                                ingredient.getId(), newQuantity);
+
+                        if (success) {
+                            Toast.makeText(this, "✅ Количество обновлено", Toast.LENGTH_SHORT).show();
+                            loadIngredients();
+                        } else {
+                            Toast.makeText(this, "❌ Ошибка обновления", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, "Введите число", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Отмена", null)
@@ -144,72 +176,24 @@ public class IngredientsActivity extends AppCompatActivity {
 
     private void showDeleteIngredientConfirmation(final Ingredient ingredient) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Подтверждение удаления")
-                .setMessage("Вы уверены, что хотите удалить ингредиент \"" + ingredient.getName() + "\"?")
-                .setPositiveButton("Удалить", new android.content.DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(android.content.DialogInterface dialog, int which) {
-                        boolean success = dbHelper.deleteIngredient(ingredient.getId());
-                        if (success) {
-                            setupIngredientsList();
-                            Toast.makeText(IngredientsActivity.this,
-                                    "Ингредиент удален: " + ingredient.getName(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(IngredientsActivity.this, "Ошибка удаления", Toast.LENGTH_SHORT).show();
-                        }
+        builder.setTitle("🗑️ Удаление ингредиента")
+                .setMessage("Удалить \"" + ingredient.getName() + "\"?")
+                .setPositiveButton("Удалить", (dialog, which) -> {
+                    boolean success = dbHelper.deleteIngredient(ingredient.getId());
+                    if (success) {
+                        Toast.makeText(this, "✅ Ингредиент удален", Toast.LENGTH_SHORT).show();
+                        loadIngredients();
+                    } else {
+                        Toast.makeText(this, "❌ Ошибка удаления", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Отмена", null)
                 .show();
     }
 
-    private void setupBottomNavigation() {
-        TextView btnStopList = findViewById(R.id.btnStopListNav);
-        TextView btnIngredients = findViewById(R.id.btnIngredientsNav);
-        TextView btnMenu = findViewById(R.id.btnMenuNav);
-
-        // Активная кнопка (Ингредиенты)
-        btnIngredients.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500));
-        btnIngredients.setTextColor(ContextCompat.getColor(this, R.color.white));
-
-        btnStopList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Переход к стоп-листу
-                Intent intent = new Intent(IngredientsActivity.this, AdminStopListActivity.class);
-                startActivity(intent);
-                // НЕ завершаем текущую активность, чтобы можно было вернуться
-            }
-        });
-
-        btnIngredients.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Уже в ингредиентах - ничего не делаем
-            }
-        });
-
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Переход к управлению меню
-                Intent intent = new Intent(IngredientsActivity.this, ManageMenuActivity.class);
-                startActivity(intent);
-                // НЕ завершаем текущую активность, чтобы можно было вернуться
-            }
-        });
-    }
-
-    private void setupLogoutButton() {
-        Button btnLogout = findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(IngredientsActivity.this, RoleSelectionActivity.class);
-                startActivity(intent);
-                finish(); // Завершаем только при выходе из приложения
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadIngredients();
     }
 }

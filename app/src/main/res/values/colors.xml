@@ -1,16 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="green">#4CAF50</color>
+    <!-- Material Design Colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="gray">#FFCCCCCC</color>
-    <color name="light_gray">#FFE0E0E0</color>
-    <color name="blue">#2196F3</color>
-    <color name="orange">#FF9800</color>
+
+    <!-- Basic Colors -->
     <color name="red">#F44336</color>
+    <color name="pink">#E91E63</color>
+    <color name="purple">#9C27B0</color>
+    <color name="deep_purple">#673AB7</color>
+    <color name="indigo">#3F51B5</color>
+    <color name="blue">#2196F3</color>
+    <color name="light_blue">#03A9F4</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="teal">#009688</color>
+    <color name="green">#4CAF50</color>
+    <color name="light_green">#8BC34A</color>
+    <color name="lime">#CDDC39</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="amber">#FFC107</color>
+    <color name="orange">#FF9800</color>
+    <color name="deep_orange">#FF5722</color>
+    <color name="brown">#795548</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="blue_grey">#607D8B</color>
+
+    <!-- Gray Shades -->
+    <color name="light_gray">#E0E0E0</color>
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray">#9E9E9E</color>
+    <color name="gray_dark">#616161</color>
+    <color name="dark_gray">#424242</color>
+
+    <!-- Black and White -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- App Specific Colors -->
+    <color name="colorPrimary">@color/purple_500</color>
+    <color name="colorPrimaryDark">@color/purple_700</color>
+    <color name="colorAccent">@color/teal_200</color>
+    <color name="colorPrimaryLight">@color/purple_200</color>
+
+    <color name="background">#F5F5F5</color>
+    <color name="colorBackground">@color/background</color>
+    <color name="colorSurface">#FFFFFF</color>
+
+    <color name="colorError">@color/red</color>
+    <color name="colorSuccess">@color/green</color>
+    <color name="colorWarning">@color/orange</color>
+    <color name="colorInfo">@color/blue</color>
+
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="colorTextPrimary">@color/text_primary</color>
+    <color name="colorTextSecondary">@color/text_secondary</color>
+    <color name="colorTextHint">#BDBDBD</color>
+    <color name="colorTextOnPrimary">#FFFFFF</color>
+    <color name="colorTextOnAccent">#000000</color>
+
+    <!-- Role Selection -->
+    <color name="admin_gradient_start">#FF4169E1</color>
+    <color name="admin_gradient_end">#FF8A2BE2</color>
+    <color name="chef_gradient_start">#FFFF7F50</color>
+    <color name="chef_gradient_end">#FFFF6347</color>
+    <color name="client_gradient_start">#FF32CD32</color>
+    <color name="client_gradient_end">#FF00CED1</color>
+
+    <!-- Transparency -->
+    <color name="white_transparent">#80FFFFFF</color>
+    <color name="black_transparent">#80000000</color>
+
+    <!-- Client Interface -->
+    <color name="client_card_1">#FF6B6B</color>
+    <color name="client_card_2">#4ECDC4</color>
+    <color name="client_card_3">#45B7D1</color>
+    <color name="client_card_4">#96CEB4</color>
+    <color name="client_card_5">#FFEAA7</color>
+
+    <!-- Status Colors -->
+    <color name="status_active">#4CAF50</color>
+    <color name="status_inactive">#FF9800</color>
+    <color name="status_blocked">#F44336</color>
+    <color name="status_pending">#FFC107</color>
+
 </resources>

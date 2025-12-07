@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@android:color/white"
     android:layout_marginBottom="8dp"
+    android:background="@color/white"
     android:elevation="2dp">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:id="@+id/tvManageDishName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Борщ"
+            android:text="Название блюда"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
@@ -27,49 +27,45 @@
             android:id="@+id/tvManageDishPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="350 ₽"
+            android:text="0 ₽"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnAddToStopList"
+    <!-- Кнопки управления -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🚫"
-        android:textSize="16sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="12dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/purple_700"
-        android:textColor="@color/white" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="✏️"
-        android:textSize="16sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="12dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/teal_700"
-        android:textColor="@color/white" />
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
+            android:text="✏️"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🗑️"
-        android:textSize="16sp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="12dp"
-        android:backgroundTint="@color/purple_700"
-        android:textColor="@color/white" />
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
+            android:text="🗑️"
+            android:backgroundTint="@color/red"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnAddToStopList"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="🚫"
+            android:backgroundTint="@color/orange"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 </LinearLayout>

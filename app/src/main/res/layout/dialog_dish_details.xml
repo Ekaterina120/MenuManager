@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvDishName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Название блюда"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvDishPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="999 ₽"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvDishDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Описание блюда"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4sp"
+            android:paddingBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Загрузка состава..."
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2sp"
+            android:paddingBottom="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_favorite_border"
+                android:contentDescription="Toggle favorite"
+                android:tint="@color/colorAccent"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Добавить в избранное"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnRecommendSimilar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Показать похожие блюда"
+            android:textColor="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimaryLight"
+            android:paddingVertical="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

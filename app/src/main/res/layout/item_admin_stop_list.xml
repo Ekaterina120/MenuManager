@@ -14,8 +14,9 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <!-- Название блюда -->
         <TextView
-            android:id="@+id/tvStopListDishName"
+            android:id="@+id/tvAdminStopDishName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Название блюда"
@@ -23,26 +24,27 @@
             android:textStyle="bold"
             android:textColor="@color/black" />
 
+        <!-- Статус -->
         <TextView
-            android:id="@+id/tvStopListReason"
+            android:id="@+id/tvAdminStopStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Причина"
+            android:text="В стоп-листе"
             android:textSize="14sp"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>
 
+    <!-- Кнопка удаления из стоп-листа -->
     <Button
-        android:id="@+id/btnRemoveFromStopList"
+        android:id="@+id/btnAdminRemoveFromStopList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Вернуть в меню"
-        android:textSize="12sp"
+        android:text="Убрать"
         android:minWidth="0dp"
         android:minHeight="0dp"
-        android:padding="8dp"
+        android:padding="12dp"
         android:backgroundTint="@color/green"
         android:textColor="@color/white" />
 

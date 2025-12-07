@@ -1,3 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MenuManager</string>
+    <!-- App name -->
+    <string name="app_name">Menu Manager</string>
+
+    <!-- Common strings -->
+    <string name="ok">OK</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="add">Добавить</string>
+    <string name="close">Закрыть</string>
+    <string name="back">Назад</string>
+    <string name="next">Далее</string>
+    <string name="submit">Отправить</string>
+    <string name="search">Поиск</string>
+    <string name="loading">Загрузка...</string>
+    <string name="error">Ошибка</string>
+    <string name="success">Успешно</string>
+
+    <!-- Client Menu strings -->
+    <string name="qr_code">QR Code</string>
+    <string name="refresh">Обновить</string>
+    <string name="filter_favorites">Фильтр по избранному</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="toggle_favorite">Переключить избранное</string>
+    <string name="dish_details">Детали блюда</string>
+    <string name="ingredients">Ингредиенты</string>
+    <string name="similar_dishes">Похожие блюда</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="favorites">Избранное</string>
+    <string name="menu">Меню</string>
+    <string name="all_dishes">Все блюда</string>
+    <string name="empty_menu">Меню пусто</string>
+    <string name="empty_favorites">Нет избранных блюд</string>
+    <string name="empty_recommendations">Нет рекомендаций</string>
+
+    <!-- Login strings -->
+    <string name="login">Вход</string>
+    <string name="logout">Выход</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="invalid_password">Неверный пароль</string>
+    <string name="role">Роль</string>
+
+    <!-- Role strings -->
+    <string name="admin">Администратор</string>
+    <string name="chef">Повар</string>
+    <string name="client">Клиент</string>
+    <string name="select_role">Выберите роль</string>
+
+    <!-- Database strings -->
+    <string name="database_error">Ошибка базы данных</string>
+    <string name="connection_error">Ошибка подключения</string>
+    <string name="data_loaded">Данные загружены</string>
+    <string name="data_saved">Данные сохранены</string>
+    <string name="data_deleted">Данные удалены</string>
+
+    <!-- Dish strings -->
+    <string name="dish_name">Название блюда</string>
+    <string name="dish_price">Цена</string>
+    <string name="dish_description">Описание</string>
+    <string name="dish_category">Категория</string>
+    <string name="new_dish">Новое блюдо</string>
+    <string name="edit_dish">Редактировать блюдо</string>
+
+    <!-- Ingredient strings -->
+    <string name="ingredient_name">Название ингредиента</string>
+    <string name="ingredient_quantity">Количество</string>
+    <string name="new_ingredient">Новый ингредиент</string>
+    <string name="edit_ingredient">Редактировать ингредиент</string>
+
+    <!-- Stop list strings -->
+    <string name="stop_list">Стоп-лист</string>
+    <string name="add_to_stop_list">Добавить в стоп-лист</string>
+    <string name="remove_from_stop_list">Удалить из стоп-листа</string>
+    <string name="empty_stop_list">Стоп-лист пуст</string>
+
+    <!-- QR Code strings -->
+    <string name="qr_menu">QR Меню</string>
+    <string name="table_number">Номер столика</string>
+    <string name="scan_qr">Сканировать QR</string>
+    <string name="share_qr">Поделиться QR</string>
+    <string name="qr_instructions">Наведите камеру для просмотра меню</string>
+
+    <!-- Messages -->
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="good_morning">Доброе утро!</string>
+    <string name="good_afternoon">Добрый день!</string>
+    <string name="good_evening">Добрый вечер!</string>
+    <string name="welcome_client">Добро пожаловать, Клиент!</string>
+    <string name="welcome_chef">Добро пожаловать, Повар!</string>
+    <string name="welcome_admin">Добро пожаловать, Администратор!</string>
+
+    <!-- Errors -->
+    <string name="error_loading_data">Ошибка загрузки данных</string>
+    <string name="error_saving_data">Ошибка сохранения данных</string>
+    <string name="error_deleting_data">Ошибка удаления данных</string>
+    <string name="error_network">Ошибка сети</string>
+    <string name="try_again">Попробовать снова</string>
+
+    <!-- Success messages -->
+    <string name="added_to_favorites">Добавлено в избранное</string>
+    <string name="removed_from_favorites">Удалено из избранного</string>
+    <string name="menu_updated">Меню обновлено</string>
+    <string name="changes_saved">Изменения сохранены</string>
+
+    <!-- Search -->
+    <string name="search_hint">Поиск блюд...</string>
+    <string name="no_results">Ничего не найдено</string>
+
+    <!-- Navigation -->
+    <string name="home">Главная</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+    <string name="help">Помощь</string>
+    <string name="about">О приложении</string>
+
+    <!-- App info -->
+    <string name="version">Версия</string>
+    <string name="developer">Разработчик</string>
+    <string name="contact">Контакты</string>
+
+    <!-- Placeholders -->
+    <string name="app_logo">Логотип приложения</string>
+    <string name="user_avatar">Аватар пользователя</string>
+    <string name="dish_image">Изображение блюда</string>
 </resources>

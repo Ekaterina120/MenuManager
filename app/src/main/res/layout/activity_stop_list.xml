@@ -5,97 +5,44 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Header с кнопкой выхода -->
+    <!-- Заголовок -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="@color/light_gray">
+        android:background="@color/orange"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Стоп-лист"
+            android:text="🚫 Стоп-лист"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textColor="@color/white"/>
 
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Добавить"
-            android:backgroundTint="@color/green"
-            android:textColor="@color/white"
-            android:layout_marginEnd="8dp" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Выйти"
-            android:backgroundTint="@color/gray"
-            android:textColor="@color/black" />
-
+            android:text="⬅ Назад"
+            android:backgroundTint="@color/gray"/>
     </LinearLayout>
 
+    <!-- Контейнер для стоп-листа -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:padding="16dp">
 
         <LinearLayout
             android:id="@+id/stopListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"/>
 
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/light_gray"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/btnStopListNav"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Стоп-лист"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btnIngredientsNav"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ингредиенты"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btnMenuNav"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Меню"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
 
 </LinearLayout>

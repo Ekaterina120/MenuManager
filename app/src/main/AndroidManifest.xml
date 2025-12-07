@@ -1,91 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Разрешения если нужны -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    package="com.example.menumanager">
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.MenuManager"
-        tools:targetApi="31"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/Theme.MenuManager">
 
-        <!-- Главная активность - выбор роли -->
+        <!-- Главная активность -->
         <activity
             android:name=".RoleSelectionActivity"
-            android:exported="true"
-            android:label="Выбор роли">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Активность входа -->
-        <activity
-            android:name=".LoginActivity"
-            android:label="Вход в систему"
-            android:exported="false" />
+        <!-- Активности которые должны быть: -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ClientMenuActivity" />
+        <activity android:name=".ChefActivity" />
+        <activity android:name=".ManageMenuActivity" />
+        <activity android:name=".ClientActivity" /> <!-- Если этот класс существует -->
 
-        <!-- АДМИНИСТРАТОРСКИЕ АКТИВНОСТИ -->
-
-        <!-- Управление меню -->
-        <activity
-            android:name=".ManageMenuActivity"
-            android:label="Управление меню"
-            android:exported="false" />
-
-        <!-- Стоп-лист (админская версия) -->
-        <activity
-            android:name=".AdminStopListActivity"
-            android:label="Стоп-лист"
-            android:exported="false" />
-
-        <!-- Управление ингредиентами -->
-        <activity
-            android:name=".IngredientsActivity"
-            android:label="Управление ингредиентами"
-            android:exported="false" />
-
-        <!-- КЛИЕНТСКИЕ АКТИВНОСТИ -->
-
-        <!-- Клиентское меню -->
-        <activity
-            android:name=".ClientMenuActivity"
-            android:label="Меню"
-            android:exported="false" />
-
-        <!-- Корзина -->
-        <activity
-            android:name=".CartActivity"
-            android:label="Корзина"
-            android:exported="false" />
-
-        <!-- Избранное -->
-        <activity
-            android:name=".FavoritesActivity"
-            android:label="Избранное"
-            android:exported="false" />
-
-        <!-- ОБЩИЕ АКТИВНОСТИ -->
-
-        <!-- Старая активность стоп-листа (если нужно оставить для совместимости) -->
-        <activity
-            android:name=".StopListActivity"
-            android:label="Стоп-лист"
-            android:exported="false" />
-
-        <!-- Дополнительные активности если есть -->
-        <activity
-            android:name=".ClientActivity"
-            android:label="Клиент"
-            android:exported="false" />
+        <!-- Другие активности -->
+        <activity android:name=".IngredientsActivity" />
+        <activity android:name=".StopListActivity" />
+        <activity android:name=".AdminStopListActivity" />
+        <activity android:name=".CartActivity" />
+        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".TemporaryActivity" />
 
     </application>
 

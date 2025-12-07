@@ -2,39 +2,29 @@ package com.example.menumanager;
 
 public class StopListItem {
     private int id;
-    private String dishName;
-    private String reason;
+    private String name;
+    private double price;
+    private String stopDate;
 
-    public StopListItem() {
-    }
-
-    public StopListItem(int id, String dishName, String reason) {
+    public StopListItem(int id, String name, double price) {
         this.id = id;
-        this.dishName = dishName;
-        this.reason = reason;
+        this.name = name;
+        this.price = price;
+        this.stopDate = "";
     }
 
-    public int getId() {
-        return id;
-    }
+    // Геттеры и сеттеры
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getDishName() {
-        return dishName;
-    }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public void setDishName(String dishName) {
-        this.dishName = dishName;
-    }
+    public String getStopDate() { return stopDate; }
+    public void setStopDate(String stopDate) { this.stopDate = stopDate; }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
+    public String getStatus() { return "В стоп-листе"; }
 }

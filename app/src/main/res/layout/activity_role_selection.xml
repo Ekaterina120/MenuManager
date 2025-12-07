@@ -1,129 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F5F5F5">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MenuManager"
+        android:text="MENUMANADER"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="60dp" />
+        android:textColor="#6200EE"
+        android:layout_marginBottom="40dp" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/admin_card"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выберите роль:"
+        android:textSize="20sp"
+        android:textColor="#212121"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnAdmin"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FF1976D2">
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:text="👑 Администратор"
+        android:textSize="18sp"
+        android:backgroundTint="#6200EE"
+        android:textColor="#FFFFFF" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="АДМИНИСТРАТОР"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Управление меню и отчетами"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="8dp" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/chef_card"
+    <Button
+        android:id="@+id/btnCook"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FF388E3C">
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:text="👨‍🍳 Повар"
+        android:textSize="18sp"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ПОВАР"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Стоп-лист и ингредиенты"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="8dp" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/client_card"
+    <Button
+        android:id="@+id/btnClient"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFD32F2F">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="КЛИЕНТ"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Просмотр меню"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="8dp" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+        android:layout_height="56dp"
+        android:text="👤 Клиент"
+        android:textSize="18sp"
+        android:backgroundTint="#2196F3"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

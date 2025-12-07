@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Название блюда:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:paddingBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etDishName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Например: Спагетти Карбонара"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Цена (₽):"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:paddingBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etDishPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Например: 350"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Описание (необязательно):"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:paddingBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etDishDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Краткое описание блюда"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:maxLines="4"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выберите ингредиенты:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:id="@+id/llIngredientsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="#FFFFFF" />
+
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите хотя бы один ингредиент"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:paddingTop="8dp" />
+
+</LinearLayout>

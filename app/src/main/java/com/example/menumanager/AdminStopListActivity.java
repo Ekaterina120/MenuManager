@@ -1,180 +1,124 @@
 package com.example.menumanager;
 
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import java.util.List;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdminStopListActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
-    private List<StopListItem> stopListItems;
-    private BroadcastReceiver stopListUpdateReceiver;
+    private List<StopListItem> stopList = new ArrayList<>();
+    private StopListAdapter stopListAdapter;
+    private TextView tvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_stop_list);
 
-        dbHelper = new DatabaseHelper(this);
-        stopListItems = new ArrayList<>();
+        dbHelper = DatabaseHelper.getInstance(this);
 
-        setupBroadcastReceiver();
         setupHeader();
-        setupStopList();
-        setupBottomNavigation();
-        setupBackButton();
+        setupRecyclerView();
+        loadStopList();
     }
 
-    private void setupBroadcastReceiver() {
-        stopListUpdateReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if ("STOP_LIST_UPDATED".equals(intent.getAction())) {
-                    setupStopList();
-                }
-            }
-        };
+    private void setupHeader() {
+        TextView tvHeader = findViewById(R.id.tvHeader);
+        tvHeader.setText("⛔ Стоп-лист (Админ)");
 
-        IntentFilter filter = new IntentFilter("STOP_LIST_UPDATED");
-        LocalBroadcastManager.getInstance(this).registerReceiver(stopListUpdateReceiver, filter);
+        Button btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView rvStopList = findViewById(R.id.rvStopList);
+        rvStopList.setLayoutManager(new LinearLayoutManager(this));
+        stopListAdapter = new StopListAdapter();
+        rvStopList.setAdapter(stopListAdapter);
+
+        tvEmpty = findViewById(R.id.tvEmpty);
+    }
+
+    private void loadStopList() {
+        new Thread(() -> {
+            stopList = dbHelper.getStopList();
+            runOnUiThread(() -> {
+                stopListAdapter.notifyDataSetChanged();
+                updateEmptyState();
+            });
+        }).start();
+    }
+
+    private void updateEmptyState() {
+        tvEmpty.setVisibility(stopList.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    // Адаптер
+    private class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.StopListViewHolder> {
+
+        @Override
+        public StopListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_stop_list_admin, parent, false);
+            return new StopListViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(StopListViewHolder holder, int position) {
+            StopListItem item = stopList.get(position);
+            holder.bind(item);
+        }
+
+        @Override
+        public int getItemCount() {
+            return stopList.size();
+        }
+
+        class StopListViewHolder extends RecyclerView.ViewHolder {
+            TextView tvName, tvPrice;
+            Button btnRestore;
+
+            public StopListViewHolder(View itemView) {
+                super(itemView);
+                tvName = itemView.findViewById(R.id.tvStopDishName);
+                tvPrice = itemView.findViewById(R.id.tvStopDishPrice);
+                btnRestore = itemView.findViewById(R.id.btnRestore);
+            }
+
+            public void bind(StopListItem item) {
+                tvName.setText(item.getName());
+                tvPrice.setText(String.format("%.0f ₽", item.getPrice()));
+
+                btnRestore.setOnClickListener(v -> {
+                    new Thread(() -> {
+                        boolean success = dbHelper.removeFromStopList(item.getId());
+                        runOnUiThread(() -> {
+                            if (success) {
+                                Toast.makeText(AdminStopListActivity.this,
+                                        "✅ Блюдо восстановлено", Toast.LENGTH_SHORT).show();
+                                loadStopList();
+                            }
+                        });
+                    }).start();
+                });
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setupStopList();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (stopListUpdateReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(stopListUpdateReceiver);
-        }
-    }
-
-    private void setupHeader() {
-        TextView tvHeader = findViewById(R.id.tvHeader);
-        tvHeader.setText("Стоп-лист");
-    }
-
-    private void setupStopList() {
-        LinearLayout stopListContainer = findViewById(R.id.stopListContainer);
-        stopListContainer.removeAllViews();
-
-        stopListItems = dbHelper.getStopList();
-
-        if (stopListItems.isEmpty()) {
-            TextView emptyText = new TextView(this);
-            emptyText.setText("Стоп-лист пустой");
-            emptyText.setTextSize(18);
-            emptyText.setTextColor(android.graphics.Color.BLACK);
-            emptyText.setPadding(0, 50, 0, 0);
-            emptyText.setGravity(android.view.Gravity.CENTER);
-            stopListContainer.addView(emptyText);
-        } else {
-            LayoutInflater inflater = LayoutInflater.from(this);
-
-            for (final StopListItem item : stopListItems) {
-                View itemView = inflater.inflate(R.layout.item_admin_stop_list, stopListContainer, false);
-
-                TextView tvDishName = itemView.findViewById(R.id.tvStopListDishName);
-                TextView tvReason = itemView.findViewById(R.id.tvStopListReason);
-                Button btnRemoveFromStopList = itemView.findViewById(R.id.btnRemoveFromStopList);
-
-                tvDishName.setText(item.getDishName());
-                tvReason.setText(item.getReason());
-
-                btnRemoveFromStopList.setText("УБРАТЬ ИЗ СТОП-ЛИСТА");
-                btnRemoveFromStopList.setBackgroundColor(android.graphics.Color.RED);
-
-                btnRemoveFromStopList.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showRemoveFromStopListConfirmation(item);
-                    }
-                });
-
-                stopListContainer.addView(itemView);
-            }
-        }
-    }
-
-    private void setupBottomNavigation() {
-        TextView btnStopList = findViewById(R.id.btnStopListNav);
-        TextView btnMenu = findViewById(R.id.btnMenuNav);
-
-        // УБИРАЕМ кнопку ингредиентов для администратора
-        TextView btnIngredients = findViewById(R.id.btnIngredientsNav);
-        if (btnIngredients != null) {
-            btnIngredients.setVisibility(View.GONE);
-        }
-
-        if (btnStopList != null && btnMenu != null) {
-            // Активная кнопка (Стоп-лист)
-            btnStopList.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500));
-            btnStopList.setTextColor(ContextCompat.getColor(this, R.color.white));
-
-            btnStopList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Уже в стоп-листе
-                }
-            });
-
-            btnMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Переход к управлению меню
-                    Intent intent = new Intent(AdminStopListActivity.this, ManageMenuActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
-    private void showRemoveFromStopListConfirmation(final StopListItem item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Восстановление блюда")
-                .setMessage("Вы уверены, что хотите вернуть блюдо \"" + item.getDishName() + "\" в меню?")
-                .setPositiveButton("Вернуть в меню", new android.content.DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(android.content.DialogInterface dialog, int which) {
-                        boolean success = dbHelper.removeFromStopListAndShow(item.getId());
-
-                        if (success) {
-                            setupStopList();
-                            Toast.makeText(AdminStopListActivity.this, "Блюдо \"" + item.getDishName() + "\" возвращено в меню", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent("STOP_LIST_UPDATED");
-                            LocalBroadcastManager.getInstance(AdminStopListActivity.this).sendBroadcast(intent);
-                        } else {
-                            Toast.makeText(AdminStopListActivity.this, "Ошибка при восстановлении блюда", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("Отмена", null)
-                .show();
-    }
-
-    private void setupBackButton() {
-        Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        loadStopList();
     }
 }
